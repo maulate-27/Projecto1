@@ -1,129 +1,124 @@
 package controller;
 
 import java.util.*;
+import java.util.List;
 import model.*;
 import dao.*;
 import util.*;
 import java.sql.*;
+import javax.swing.*;
+import java.awt.*;
 
 public class DistribuicaoCandidatos {
     private SalaDAO salaEstruturaDAO = new SalaDAO();
     private SalaCandidatoDAO salaCandidatoDAO = new SalaCandidatoDAO();
     private LocalidadeDAO localidadeDAO = new LocalidadeDAO();
     private DisciplinaDao disciplinaDAO = new DisciplinaDao();
+    private EscolaPreUniversitarioDAO escolaDAO = new EscolaPreUniversitarioDAO();
+    private CandidatoDao candidatoDao = new CandidatoDao();
 
-    public void distribuir(List<GerenciarCandidato> candidatos) throws SQLException {
-        
-        		System.out.println("Iniciando distribuição. Total de candidatos: " + candidatos.size());
-            // Buscar salas disponíveis
-            List<SalaEstrutura> salas = salaEstruturaDAO.buscarTodas();
-            if (salas.isEmpty()) {
-                throw new RuntimeException("Nenhuma sala disponível!");
-            }
-           
-           // Buscar mapeamento de designacao para localID
-       		 	Map<String, Integer> designacaoParaLocalID = localidadeDAO.buscarDesignacaoParaLocalID();
-        		System.out.println("Províncias carregadas: " + designacaoParaLocalID.keySet());
-        		
-        		salaCandidatoDAO.excluirTudo();
-           	System.out.println("Tabela sala_candidato limpa.");
+    public void distribuirPorSelecao(String provinciaSelecionada, String disciplinaSelecionada) throws SQLException {
+    System.out.println("Iniciando distribuição por seleção. Província: " + provinciaSelecionada + ", Disciplina: " + disciplinaSelecionada);
+    
+    int provinciaId = localidadeDAO.buscarIdPorNome(provinciaSelecionada);
+    if (provinciaId == -1) {
+        System.out.println("ID da província não encontrado: " + provinciaSelecionada);
+        return;
+    }
 
-            // Distribuir candidatos por província
-            // Agrupar salas por localID
-       			Map<Integer, List<SalaEstrutura>> salasPorLocalID = new HashMap<>();
-        		for (SalaEstrutura sala : salas) {
-            	int localID = sala.getProvincia();
-            	System.out.println("Sala: " + sala.getNrSala() + ", localID: " + localID);
-            	salasPorLocalID.computeIfAbsent(localID, k -> new ArrayList<>()).add(sala);
-        		}
+    List<GerenciarCandidato> candidatos = candidatoDao.buscarPorProvincia(provinciaSelecionada);
+    if (candidatos.isEmpty()) {
+        JOptionPane.showMessageDialog(null,"Nenhum candidato encontrado para a província selecionada.", "Informacao", JOptionPane.INFORMATION_MESSAGE);
+        return;
+    }
 
-						
-						int alocados = 0;
-            for (GerenciarCandidato candidato : candidatos) {
-                String nome = candidato.getNome() != null ? candidato.getNome() : "Sem nome";
-            String provincia = candidato.getProv_Resi() != null ? candidato.getProv_Resi().trim() : "";
-            System.out.println("Candidato: " + nome + ", Província: " + provincia);
-            
-            if(candidato.getNrCandidato() <= 0) {
-            	System.out.println("Erro: Número de candidato inválido para " + nome);
-              continue;
-            }
-            		
-            		 // Mapear prov_Nasc para localID
-            		Integer localID = designacaoParaLocalID.get(provincia.toLowerCase());
-            		if (localID == null) {
-                	System.out.println("Sem localID para província " + provincia + " para " + nome);
-                	continue;
-            		}
-            		System.out.println("Prov_Nasc: " + provincia + " mapeado para localID: " + localID);
-            		
-                List<SalaEstrutura> salasDisponiveis = salasPorLocalID.getOrDefault(localID, new ArrayList<>());
-								System.out.println("************ O nr total das salas disponiveis sao: " + salasDisponiveis + " *********************");
-                if (salasDisponiveis.isEmpty()) {
-                    System.out.println("Nenhuma sala na província " + provincia + ". Tentando outras salas.");
-                //salasDisponiveis = new ArrayList<>(salas);
-                continue;
-                }
-                
-                 // Ordenar salas por prioridade e ordem
-           	 		salasDisponiveis.sort((s1, s2) -> {
-                	if (s1.getOrdem() != s2.getOrdem()) {
-                    return Integer.compare(s1.getOrdem(), s2.getOrdem());
-                	}
-                	return Integer.compare(s2.getPrioridade(), s1.getPrioridade());
-            		});
+    Disciplina disciplina = disciplinaDAO.buscarPorCodigo(disciplinaSelecionada);
+    if (disciplina == null) {
+        System.out.println("Disciplina não encontrada: " + disciplinaSelecionada);
+        return;
+    }
 
+    List<EscolaPreUniversitario> escolas = escolaDAO.buscarPorProvincia(provinciaId);
+    if (escolas.isEmpty()) {
+        JOptionPane.showMessageDialog(null,"Desculpe ainda nao cadastrei a sala nessa Provincia", "Informacao", JOptionPane.INFORMATION_MESSAGE);
+        return;
+    }
 
-                // Escolher sala com capacidade disponível
-                boolean alocado = false;
-                for (SalaEstrutura sala : salasDisponiveis) {
-                    alocados = contarAlocados(sala.getNrSala());
-                    System.out.println("Sala " + sala.getNrSala() + ": " + alocados + "/" + sala.getCapacidade());
-                    if (alocados < sala.getCapacidade()) {
-                        
-                        List<String> disciplinas = disciplinaDAO.buscarDisciplinasPorCurso(candidato.getOpcao1());
-												if (disciplinas.isEmpty()) {
-											    System.out.println("Curso " + candidato.getOpcao1() + " sem disciplinas associadas.");
-    											continue;
-												}
-												System.out.println("Disciplinas encontradas para curso " + candidato.getOpcao1() + ": " + disciplinas);
+    for (GerenciarCandidato candidato : candidatos) {
+        List<String> disciplinasCurso = disciplinaDAO.buscarDisciplinasPorCurso(candidato.getOpcao1());
+        if (!disciplinasCurso.contains(disciplinaSelecionada)) {
+            System.out.println("Candidato " + candidato.getNome() + " não realiza a disciplina " + disciplinaSelecionada);
+            continue;
+        }
 
-												for(String disciplina : disciplinas.subList(0, Math.min(2, disciplinas.size()))){
-													Sala alocacao = new Sala();
-													System.out.println("As disciplinas sao : " + disciplina);
-                        	alocacao.setProvincia(candidato.getProv_Resi());
-                        	alocacao.setNrCandidato(candidato.getNrCandidato());
-                        	alocacao.setNome(candidato.getNome());
-                        	alocacao.setOpcao1(candidato.getOpcao1() + "");
-                        	alocacao.setOpcao2(candidato.getOpcao2() + "");
-                       	 	alocacao.setDisciplina(disciplina); 
-                        	alocacao.setLocal(sala.getLocal());
-                        	alocacao.setSala(sala.getNrSala());
-                        	
-                        	try {
+        if (salaCandidatoDAO.jaAlocado(candidato.getNrCandidato(), disciplinaSelecionada)) {
+            System.out.println("Candidato " + candidato.getNome() + " já está alocado na disciplina " + disciplinaSelecionada);
+            continue;
+        }
+
+        boolean alocado = false;
+        for (EscolaPreUniversitario escola : escolas) {
+            List<SalaEstrutura> salas = salaEstruturaDAO.buscarPorEscola(escola.getDesignacao());
+            for (SalaEstrutura sala : salas) {
+            	//verifica as saalas ocupadas 
+                int ocupados = salaEstruturaDAO.contarCandidatosNaSalaPorDataEHora(sala.getNrSala(), disciplina.getData(), disciplina.getHora());
+                if (ocupados < sala.getCapacidade()) {
+                    Sala alocacao = new Sala();
+                    alocacao.setNrCandidato(candidato.getNrCandidato());
+                    alocacao.setNome(candidato.getNome());
+                    alocacao.setOpcao1(String.valueOf(candidato.getOpcao1()));
+                    alocacao.setOpcao2(String.valueOf(candidato.getOpcao2()));
+                    alocacao.setDisciplina(disciplina.getCodDisc());
+                    alocacao.setSala(sala.getNrSala());
+                    alocacao.setLocal(sala.getLocal());
+                    alocacao.setProvincia(provinciaSelecionada);
+                    alocacao.setData(disciplina.getData());
+											
+                    try {
                         salaCandidatoDAO.salvar(alocacao,sala);
-                        alocados++;
-                        System.out.println("Candidato " + candidato.getNome() + " alocado na sala " + sala.getNrSala());
-                        }catch(RuntimeException e){
-                        	System.err.println("Erro ao salvar alocação para candidato " + candidato.getNome() + ": " + e.getMessage());
-                        throw e;
-                        }catch(Exception ty){
-                        	System.out.println("ERROOO");
-                        }
-                       }
-                       
-                       alocado = true;
-                       break;
+                        System.out.println("Alocado: " + candidato.getNome() + " → " + disciplinaSelecionada + " na sala " + sala.getNrSala() + " Data: " + disciplina.getData() + " Local ==> " + sala.getLocal());
+                        alocado = true;
+                        break;
+                    } catch (Exception e) {
+                        System.err.println("Erro ao alocar candidato: " + e.getMessage());
                     }
                 }
-                if (!alocado) {
-                System.out.println("Não alocado: " + nome + " (todas as salas cheias)");
             }
-            }
-            System.out.println("Distribuição concluída. Total de candidatos alocados: " + alocados);
+            if (alocado) break;
+        }
+
+        if (!alocado) {
+            System.out.println("Não foi possível alocar " + candidato.getNome() + " na disciplina " + disciplinaSelecionada);
+        }
     }
 
-    private int contarAlocados(String nrSala) throws SQLException {
-        return salaEstruturaDAO.contarCandidatosNaSala(nrSala);
+   JOptionPane.showMessageDialog(null,"Destribuicao finalizada com sucesso: Clique em TabelasBasicas ---> sala_candidato para visualizar", "Informacao", JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	// metodo usar na classe DistribuicaoFame.java
+	public void mostrarDialogoDistribuicao() {
+    try {
+        List<String> provincias = candidatoDao.buscarProvinciasDistintas();
+        List<String> disciplinas = disciplinaDAO.buscarCodigosExistentes();
+
+        JComboBox<String> comboProvincia = new JComboBox<>(provincias.toArray(new String[0]));
+        JComboBox<String> comboDisciplina = new JComboBox<>(disciplinas.toArray(new String[0]));
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(2, 2));
+        panel.add(new JLabel("Província:"));
+        panel.add(comboProvincia);
+        panel.add(new JLabel("Disciplina:"));
+        panel.add(comboDisciplina);
+
+        int result = JOptionPane.showConfirmDialog(null, panel, "Distribuição Personalizada", JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            String provinciaSelecionada = (String) comboProvincia.getSelectedItem();
+            String disciplinaSelecionada = (String) comboDisciplina.getSelectedItem();
+            distribuirPorSelecao(provinciaSelecionada, disciplinaSelecionada);
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Erro ao carregar opções: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
     }
+	}
 }

@@ -41,13 +41,14 @@ public class Menu extends JFrame implements ActionListener {
 	private JButton bt;
 	private Login lg;
 	private RelatorioPDF pdf = new RelatorioPDF();
+	private RelatorioEstatisticasPDF relatorioEstatisticas = new RelatorioEstatisticasPDF();
 	private JMenuItem[] itens = new JMenuItem[100];
 	private JMenu[] menu = new JMenu[100];
 	private String exameR = "RelaExame";
 	private String[] word = {"Candidato", "Relatorios", "Sobre", "Sair", "Cadastrar", "Visualizar", "Buscar", "Jogo", "TabelasBasicas", "DistribuirCandidatos"};
 	private String[] colunas = {"ID", "NrCandidato", "Nome", "Apelido", "BI", "Genero", "Pais", "Prov_Nasc", "Prov_Resi", "Nacionalidade", "EstadoCivil", "Data_Nascimento", "Regime", "Delegacao", "EscPU", "Opcao1", "Opcao2", "TipoEst"};
 	private String[] colunasC = {"Sequencia", "Codigo", "Activo", "Descricao", "Regime_id", "Faculdade", "CodigoGerado"};
-	private String[] colunasSalaCandidato = {"ID", "Provincia", "NrCandidato", "Nome", "Opcao1", "Opcao2", "Disciplina", "Local", "Sala"};
+	private String[] colunasSalaCandidato = {"ID", "Provincia", "NrCandidato", "Nome", "Opcao1", "Opcao2", "Disciplina", "Local", "Sala", "Data"};
 	private String[] colunaDisci = {"ID", "CodDisc", "Designacao", "Data", "Hora", "HoraEntrada", "Ord", "Subj"};
 	private String[] colunaLocal = {"Provincia ID", "Designacao"};
 	private String[] colunaDeleg = {"Delegacao ID", "Designacao", "Abreviatura"};
@@ -134,10 +135,15 @@ public class Menu extends JFrame implements ActionListener {
 			itens[i + 10].addActionListener(this);
 		}
 		
+		itens[21] = new JMenuItem("Relatório Estatístico Geral");
+		itens[21].addActionListener(this);
+
+		
 		itens[2] = new JMenuItem(word[5]);
 		itens[3] = new JMenuItem(word[6]);
 		itens[20] = new JMenuItem(exameR);
 		menu[1].add(itens[20]);
+		menu[1].add(itens[21]);
 		
 		menu[0].add(itens[2]);
 		menu[0].add(itens[3]);
@@ -184,6 +190,10 @@ public class Menu extends JFrame implements ActionListener {
 				String caminho = "/home/maulate/Transferências/Projecto1/src/main/java/com/Relatorio.pdf";
 				pdf.gerarRelatorio(caminho);
 				RelatorioPDF.abrirPDF(caminho);
+			} else if (e.getSource() == itens[21]) {
+    		String caminho = "estatisticas_gerais.pdf";
+    		relatorioEstatisticas.gerar(caminho);
+    		RelatorioEstatisticasPDF.abrirPDF(caminho);
 			} else if (e.getSource() == itens[1]) {
 				cad = new CadastroEst(this, this instanceof Menu && getTitle().equals("Tela Menu Administrador"));
 				try {
@@ -450,7 +460,7 @@ public class Menu extends JFrame implements ActionListener {
 	public void actualizarSalaCandidatoTable() {
 		tablemodel.setRowCount(0);
 		try {
-			String sql = "SELECT id, provincia, nrCandidato, nome, opcao1, opcao2, disciplina, local, sala FROM sala_candidato";
+			String sql = "SELECT id, provincia, nrCandidato, nome, opcao1, opcao2, disciplina, local, sala, data FROM sala_candidato";
 				Connection conn = conm.getConnection();
 				PreparedStatement stmt = conn.prepareStatement(sql);
 				ResultSet rs = stmt.executeQuery();
@@ -464,7 +474,8 @@ public class Menu extends JFrame implements ActionListener {
 							rs.getString("opcao2"),
 							rs.getString("disciplina"),
 							rs.getString("local"),
-							rs.getString("sala")
+							rs.getString("sala"),
+							rs.getDate("data")
 					});
 				}
 			

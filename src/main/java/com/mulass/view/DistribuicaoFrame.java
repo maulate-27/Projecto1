@@ -30,7 +30,7 @@ public class DistribuicaoFrame extends JFrame implements ActionListener {
 
     private String[] colunasCandidato = {"ID", "NrCandidato", "Nome", "Provincia", "Opcao1", "Opcao2"};
     private String[] colunasSala = {"ID", "Provincia", "Nome Sala", "Capacidade", "Local"};
-    private String[] colunasResultado = {"ID", "Provincia", "NrCandidato", "Nome", "Opcao1", "Opcao2", "Disciplina", "Local", "Sala"};
+    private String[] colunasResultado = {"ID", "Provincia", "NrCandidato", "Nome", "Opcao1", "Opcao2", "Disciplina", "Local", "Sala","Data"};
 
     public DistribuicaoFrame(Menu menu){
         this.menu = menu;
@@ -166,7 +166,8 @@ public class DistribuicaoFrame extends JFrame implements ActionListener {
                         alocacao.getOpcao2(),
                         alocacao.getDisciplina(),
                         alocacao.getLocal(),
-                        alocacao.getSala()
+                        alocacao.getSala(),
+                        alocacao.getData()
                 });
             }
             cardLayout.show(mainPanel, "Resultados");
@@ -175,7 +176,7 @@ public class DistribuicaoFrame extends JFrame implements ActionListener {
         }
     }
 
-    private void distribuirCandidatos() {
+   /* private void distribuirCandidatos() {
         try {
             List<GerenciarCandidato> candidatos = candidatoDao.buscar();
             List<SalaEstrutura> salas = salaEstruturaDAO.buscarTodas();
@@ -198,7 +199,7 @@ public class DistribuicaoFrame extends JFrame implements ActionListener {
         } catch (RuntimeException e) {
             JOptionPane.showMessageDialog(this, "Erro qualquer de processamento: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
-    }
+    }*/
 
     private void limparTabelas() {
         candidatoModel.setRowCount(0);
@@ -225,7 +226,7 @@ public class DistribuicaoFrame extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnDistribuir) {
-            distribuirCandidatos();
+            distribuicaoCandidatos.mostrarDialogoDistribuicao();
         } else if (e.getSource() == btnLimpar) {
             limparTabelas();
         }else if(e.getSource() == btnExcluirAlocacoes){

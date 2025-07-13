@@ -41,7 +41,7 @@ public class DisciplinaDao {
 			disci.setId(rs.getInt("id"));
 			disci.setCodDisc(rs.getString("coddisc"));
 			disci.setDesignacao(rs.getString("designacao"));
-			disci.setData(rs.getDate("data"));
+			disci.setData(rs.getDate("data").toLocalDate());
 			disci.setHora(rs.getString("hora"));
 			disci.setHoraEntrada(rs.getString("horaentrada"));
 			disci.setOrd(rs.getInt("ordem"));
@@ -66,4 +66,55 @@ public class DisciplinaDao {
     conexao.fechar();
     return disciplinas;
 	}
+	
+		// Retorna todos os códigos de disciplinas cadastradas
+	public List<String> buscarCodigosExistentes() throws SQLException {
+    List<String> codigos = new ArrayList<>();
+    String sql = "SELECT coddisc FROM disciplinas ORDER BY coddisc";
+
+    	try {
+    		Connection conn = conexao.getConnection();
+         Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(sql);
+
+        while (rs.next()) {
+            codigos.add(rs.getString("coddisc"));
+        }
+        conexao.fechar();
+    }catch(SQLException e){
+    	conexao.fechar();
+    	throw new RuntimeException("ERRo com os codigos disciplina " + e.getMessage());
+    }
+
+    return codigos;
+	}
+
+		// Retorna uma disciplina completa com código, data e hora
+		public Disciplina buscarPorCodigo(String codigo) throws SQLException {
+    String sql = "SELECT * FROM disciplinas WHERE coddisc = ?";
+    try {
+    	Connection conn = conexao.getConnection();
+      PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, codigo);
+
+        try (ResultSet rs = stmt.executeQuery()){
+        	
+            if (rs.next()) {
+                Disciplina d = new Disciplina();
+                d.setCodDisc(rs.getString("coddisc"));
+                d.setDesignacao(rs.getString("designacao"));
+                d.setData(rs.getDate("data").toLocalDate());
+                d.setHora(rs.getString("hora"));
+                return d;
+            }
+        }
+        conexao.fechar();
+    }catch(SQLException e){
+    	conexao.fechar();
+    	throw new RuntimeException("Erroo: disciplinas e sua data e hora " + e.getMessage());
+    }
+
+    return null;
+	}
+
 }

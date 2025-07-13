@@ -33,9 +33,9 @@ public class SalaCandidatoDAO {
     public void salvar(Sala salaCandidato, SalaEstrutura salla) {
     try {
     		Connection conn = conexao.getConnection();
-        String sql = salaCandidato.getId() == 0 ? "INSERT INTO sala_candidato (provincia, nrCandidato, nome, opcao1, opcao2, disciplina, local, sala) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?)" :
-                     "UPDATE sala_candidato set provincia = ?, nrCandidato = ?, nome = ?, opcao1 = ?, opcao2 = ?, disciplina = ?, local = ?, sala = ?" +
+        String sql = salaCandidato.getId() == 0 ? "INSERT INTO sala_candidato (provincia, nrCandidato, nome, opcao1, opcao2, disciplina, local, sala, data) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)" :
+                     "UPDATE sala_candidato set provincia = ?, nrCandidato = ?, nome = ?, opcao1 = ?, opcao2 = ?, disciplina = ?, local = ?, sala = ?, data =?" +
                      "Where id = ?";
                      
                      System.out.println("Salvando alocação: Candidato " + salaCandidato.getNrCandidato() + ", Sala: " + salaCandidato.getSala()); 
@@ -55,9 +55,11 @@ public class SalaCandidatoDAO {
             stmt.setString(6, salaCandidato.getDisciplina());
             stmt.setString(7, salla.getLocal());
             stmt.setString(8, salaCandidato.getSala());
+            stmt.setDate(9, java.sql.Date.valueOf(salaCandidato.getData()));
+
 						
 						if (salaCandidato.getId() != 0) {
-                stmt.setInt(9, salaCandidato.getId());
+                stmt.setInt(10, salaCandidato.getId());
             }
           	int linhasAfectadas = stmt.executeUpdate();
 						System.out.println("Linhas afetadas: " + linhasAfectadas);
@@ -79,7 +81,7 @@ public class SalaCandidatoDAO {
     
     public List<Sala> buscar() {
      List<Sala> alocacoes = new ArrayList<>();
-     String sql = "SELECT id, provincia, nrCandidato, nome, opcao1, opcao2, disciplina, local, sala FROM sala_candidato order by id";
+     String sql = "SELECT  * FROM sala_candidato order by nrcandidato, data, disciplina";
     	try {
     		Connection conn = conexao.getConnection();
        
@@ -97,6 +99,7 @@ public class SalaCandidatoDAO {
                 salaCandidato.setDisciplina(rs.getString("disciplina"));
                 salaCandidato.setLocal(rs.getString("local"));
                 salaCandidato.setSala(rs.getString("sala"));
+                salaCandidato.setData(rs.getDate("data").toLocalDate());
                 alocacoes.add(salaCandidato);
             }
              conexao.fechar();
@@ -112,7 +115,7 @@ public class SalaCandidatoDAO {
 
     public List<Sala> buscarPorProvincia(String provincia)  {
     List<Sala> alocacoes = new ArrayList<>();
-    String sql = "SELECT id, provincia, nrCandidato, nome, opcao1, opcao2, disciplina, local, sala FROM sala_candidato WHERE provincia = ? order by id";
+    String sql = "SELECT * FROM sala_candidato WHERE provincia = ? order by nrcandidato, data, disciplina";
     try {
     		Connection conn = conexao.getConnection();
         
@@ -130,6 +133,7 @@ public class SalaCandidatoDAO {
                     salaCandidato.setDisciplina(rs.getString("disciplina"));
 		                salaCandidato.setLocal(rs.getString("local"));
                     salaCandidato.setSala(rs.getString("sala"));
+                    salaCandidato.setData(rs.getDate("data").toLocalDate());
                     alocacoes.add(salaCandidato);
                 }
             }
@@ -142,6 +146,27 @@ public class SalaCandidatoDAO {
         return alocacoes;
         
     }
+    
+    // verificar se ao candidato esta na sala ou nao
+		public boolean jaAlocado(int nrCandidato, String disciplina) {
+    String sql = "SELECT COUNT(*) FROM sala_candidato WHERE nrcandidato = ? AND disciplina = ?";
+    try {
+    	Connection conn = conexao.getConnection();
+      PreparedStatement stmt = conn.prepareStatement(sql);
+      	stmt.setInt(1, nrCandidato);
+        stmt.setString(2, disciplina);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1) > 0;
+        }
+        conexao.fechar();
+    }catch(SQLException e){
+    	conexao.fechar();
+    	throw new RuntimeException("Erro ao verificar alocacao");
+    }
+    return false;
+	}
+
     
      public void excluirTudo() {
      try {

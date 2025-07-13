@@ -171,5 +171,60 @@ public class CandidatoDao {
         }
         return null;
     }
+    
+    
+    // Retorna todas as províncias distintas da tabela de candidatos
+		public List<String> buscarProvinciasDistintas() throws SQLException {
+    List<String> provincias = new ArrayList<>();
+    String sql = "SELECT DISTINCT prov_resi FROM candidato ORDER BY prov_resi";
+
+    try {
+    	Connection conn = conm.getConnection();
+         Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(sql);
+
+        while (rs.next()) {
+            provincias.add(rs.getString("prov_resi"));
+        }
+        conm.fechar();
+    }catch(SQLException e){
+    	conm.fechar();
+    	throw new RuntimeException("Erro distincy " + e.getMessage());
+    }
+
+    return provincias;
+	}
+
+		// Retorna todos os candidatos de uma província específica
+		public List<GerenciarCandidato> buscarPorProvincia(String provincia) throws SQLException {
+    List<GerenciarCandidato> candidatos = new ArrayList<>();
+    String sql = "SELECT id, nrcandidato, nome, opcao1, opcao2, prov_resi FROM candidato WHERE prov_resi = ?";
+
+    try {
+    		Connection conn = conm.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, provincia);
+
+        try (ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                GerenciarCandidato c = new GerenciarCandidato();
+                c.setId(rs.getInt("id"));
+                c.setNrCandidato(rs.getInt("nrcandidato"));
+                c.setNome(rs.getString("nome"));
+                c.setOpcao1(rs.getInt("opcao1"));
+                c.setOpcao2(rs.getInt("opcao2"));
+                c.setProv_Resi(rs.getString("prov_resi"));
+                candidatos.add(c);
+            }
+        }
+        conm.fechar();
+    }catch(SQLException e){
+    	conm.fechar();
+    	throw new RuntimeException("Errro candidato especificando a provincia " + e.getMessage());
+    }
+
+    return candidatos;
+	}
+
 	
 }

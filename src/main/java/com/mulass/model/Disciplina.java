@@ -1,18 +1,19 @@
 package model;
 
 import java.util.*;
+import java.time.*;
 
 public class  Disciplina {
 	private int id;
 	private String codDisc;
 	private String designacao;
-	private Date data;
+	private LocalDate data;
 	private String hora;
 	private String horaEntrada;
 	private int ord;
 	private String subj;
 	
-	public Disciplina(int id, String codDisc, String designacao, Date data, String hora, String horaEntrada, int ord, String subj){
+	public Disciplina(int id, String codDisc, String designacao, LocalDate data, String hora, String horaEntrada, int ord, String subj){
 	
 		this.id = id;
 		this.codDisc = codDisc;
@@ -50,11 +51,11 @@ public class  Disciplina {
 		return designacao;
 	}
 	
-	public void setData(Date data){
+	public void setData(LocalDate data){
 		this.data = data;
 	}
 	
-	public Date getData(){
+	public LocalDate getData(){
 		return data;
 	}
 	

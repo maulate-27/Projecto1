@@ -49,4 +49,17 @@ public class LocalidadeDAO {
     	conexao.fechar();
     	return locale;
     }
+    
+    public int buscarIdPorNome(String nome) throws SQLException {
+    Connection conn = conexao.getConnection();
+    String sql = "SELECT provid FROM localidade WHERE LOWER(designacao) = LOWER(?)";
+   	PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, nome);
+        ResultSet rs = stmt.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("provid");
+        }
+    conexao.fechar();
+    return -1;
+	}
 }

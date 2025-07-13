@@ -5,6 +5,7 @@ import util.Conexao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
 
 public class SalaDAO {
     private final Conexao conexao = new Conexao();
@@ -105,27 +106,60 @@ public class SalaDAO {
         
     }
 
-    public int contarCandidatosNaSala(String nrSala) {
+	   // Conta candidatos alocados na mesma sala, data e hora
+		public int contarCandidatosNaSalaPorDataEHora(String nrSala, LocalDate data, String hora) {
+	    String sql = "SELECT COUNT(*) FROM sala_candidato WHERE sala = ? AND data = ? AND hora = ?";
+	    try {
+	    		Connection conn = conexao.getConnection();
+	        PreparedStatement stmt = conn.prepareStatement(sql);
+	        stmt.setString(1, nrSala);
+        	stmt.setDate(2, Date.valueOf(data));
+        	stmt.setString(3, hora);
+        	ResultSet rs = stmt.executeQuery();
+        	if (rs.next()) {
+            return rs.getInt(1);
+        	}
+        	conexao.fechar();
+    	}catch(SQLException e){
+    		conexao.fechar();
+    	}
+
+    	return 0;
+		}
+
+    
+    // Retorna todas as salas de uma escola
+		public List<SalaEstrutura> buscarPorEscola(String escolaId){
+    List<SalaEstrutura> salas = new ArrayList<>();
+    String sql = "SELECT * FROM salas WHERE local = ?";	
+
     try{
-    Connection conn = conexao.getConnection();
-        String sql = "SELECT COUNT(*) FROM sala_candidato WHERE sala = ?";
-        
-        
-             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, nrSala);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1);
-                }
-            }
-            conexao.fechar();
-        } catch (SQLException e) {
-            conexao.fechar();
-            throw new RuntimeException("Erro ao contar candidatos na sala: " + e.getMessage(), e);
+    	Connection conn = conexao.getConnection();
+      PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, escolaId);
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            SalaEstrutura s = new SalaEstrutura();
+            		s.setSalaID(rs.getInt("SalaID"));
+                s.setLocal(rs.getString("Local"));
+                s.setNrSala(rs.getString("NrSala"));
+                s.setProvincia(rs.getInt("Provincia"));
+                s.setPrioridade(rs.getInt("prioridade"));
+                s.setOrdem(rs.getInt("Ordem"));
+                s.setCapacidade(rs.getInt("capacidade"));
+                s.setNrVigilante(rs.getInt("NrVigilante"));
+                s.setEmUso(rs.getBoolean("EmUso"));
+            salas.add(s);
         }
-       
-        return 0;
+        conexao.fechar();
+    }catch(SQLException e){
+    	conexao.fechar();
+    	throw new RuntimeException("Erro nas salas " + e.getMessage());
     }
+
+    return salas;
+	}
+
 
     private int calcularNrVigilante(int capacidade) {
         if (capacidade == 30) {

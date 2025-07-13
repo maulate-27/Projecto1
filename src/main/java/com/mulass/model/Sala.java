@@ -1,7 +1,9 @@
 package model;
 
+import java.time.*;
+
 public class Sala {
-    private int id; // Chave primária para identificar cada alocação
+    private int id; 
     private String provincia;
     private int nrCandidato;
     private String nome;
@@ -9,9 +11,10 @@ public class Sala {
     private String opcao2;
     private String disciplina;
     private String local;
-    private String sala; // Refere-se ao NrSala da tabela sala_estrutura
+    private String sala;
+    private LocalDate data; 
 
-    // Getters and Setters
+  
     public int getId() {
         return id;
     }
@@ -82,5 +85,13 @@ public class Sala {
 
     public void setSala(String sala) {
         this.sala = sala;
+    }
+    
+    public void setData(LocalDate data){
+    	this.data = data;
+    }
+    
+    public LocalDate getData(){
+    	return data;
     }
 }
