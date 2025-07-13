@@ -222,4 +222,8 @@ public  class GerenciarCandidato {
     public String  Dados(){
     	return nome + " " + apelido + " " + opcao1;
     }
+    
+    public void algo(){
+    	
+    }
 }
