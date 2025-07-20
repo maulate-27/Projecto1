@@ -1,3 +1,4 @@
+package com.mulass;
 import view.*;
 
 class Admisao{
