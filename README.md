@@ -38,7 +38,7 @@
 
 2. Compile todos os arquivos (.java):
 
-		javac -d bin  -cp "lib/*" $(find src/main/java -name ("*.java"))
+		javac -d bin  -cp "lib/*" $(find src/main/java -name "*.java")
 
 3. Execute o sistema (classe principal):
 
