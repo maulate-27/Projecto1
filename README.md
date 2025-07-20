@@ -34,13 +34,15 @@
          
          
      INSTRUCOES PARA COMPILAR E EXECUTAR O PROJECTO
-1. Abra o terminal e vá até a pasta /src/main/java/com/mulass
+1. Abra o terminal e vá até a pasta Projecto1
 
-2. Compile todos os arquivos:
-   javac -cp .:/home/maulate/Transferências/Projecto1/lib/postgresql-42.6.0.jar:/home/maulate/Transferências/Projecto1/lib/jcalendar-1.4.jar:/home/maulate/Transferências/Projecto1/lib/itextpdf-5.5.13.2.jar Admisao.java view/*.java model/*.java util/*.java dao/*.java controller/*.java 
+2. Compile todos os arquivos (.java):
+
+		javac -d bin  -cp "lib/*" $(find src/main/java -name ("*.java"))
 
 3. Execute o sistema (classe principal):
-   java -cp .:/home/maulate/Transferências/Projecto1/lib/postgresql-42.6.0.jar:/home/maulate/Transferências/Projecto1/lib/jcalendar-1.4.jar:/home/maulate/Transferências/Projecto1/lib/itextpdf-5.5.13.2.jar Admisao 
+
+   		java -cp "bin:lib/*" com.mulass.Admisao
 
 OBS:
 - Altere os caminhos se estiver usando Windows (trocar ":" por ";")
@@ -52,15 +54,16 @@ Gestor ("Onde ocorre a distribuicao");
 		Password : machipoi
 		
 Administrador ("Onde ocorre o cadastro")
-		User : maulate
-		Password : mutota
+
+			User : maulate
+			Password : mutota
 		
-		As imagens estao no word nesse mesmo projecto
+ As imagens estao no word nesse mesmo projecto no arquivo Ilustracao.docx
 		
 		Aceite Comprimentos 
-					Maulate Antonio Isaquiel
+					Maulate António Isaquiel
 		
-		Para mais informacoes
+		Para mais informações
 		email: maulateantonio27@gmail.com
 		Contacto: [+258 842641135]
 		
