@@ -17,6 +17,7 @@ import java.text.*;
 
 public class CadastroEst extends JFrame implements ActionListener {
 
+	@SuppressWarnings("unchecked")
     private JLabel[] labelP = new JLabel[100];
     private JLabel[] labelC = new JLabel[100];
     private JLabel[] labelI = new JLabel[100];
@@ -35,9 +36,9 @@ public class CadastroEst extends JFrame implements ActionListener {
     private JTextField[] textI = new JTextField[100];
     private JTextField textBuscar;
 
-    private JComboBox<String>[] comboP = new JComboBox[100];
-    private JComboBox<String>[] comboC = new JComboBox[100];
-    private JComboBox<String>[] comboI = new JComboBox[100];
+    private JComboBox<String>[] comboP =(JComboBox<String>[]) new JComboBox<?>[100];
+    private JComboBox<String>[] comboC =(JComboBox<String>[]) new JComboBox<?>[100];
+    private JComboBox<String>[] comboI =(JComboBox<String>[]) new JComboBox<?>[100];
     private JDateChooser dateChooser;
 
     private JButton[] bt = new JButton[100];
