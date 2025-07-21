@@ -35,13 +35,18 @@ public class CadastroEst extends JFrame implements ActionListener {
     private JTextField[] textP = new JTextField[100];
     private JTextField[] textI = new JTextField[100];
     private JTextField textBuscar;
-
-		@SuppressWarnings("unchecked")
+    
+/*
+	@SuppressWarnings("unchecked")
     private JComboBox<String>[] comboP =(JComboBox<String>[]) new JComboBox<?>[100];
     @SuppressWarnings("unchecked")
     private JComboBox<String>[] comboC =(JComboBox<String>[]) new JComboBox<?>[100];
     @SuppressWarnings("unchecked")
     private JComboBox<String>[] comboI =(JComboBox<String>[]) new JComboBox<?>[100];
+*/
+	private List<JComboBox<String>> comboP = new ArrayList<>();
+	private List<JComboBox<String>> comboI = new ArrayList<>();
+	private List<JComboBox<String>> comboC = new ArrayList<>();
     private JDateChooser dateChooser;
 
     private JButton[] bt = new JButton[100];
@@ -125,19 +130,25 @@ public class CadastroEst extends JFrame implements ActionListener {
         labelC[0].setBounds(20, Py, 300, 20);
         labelC[0].setFont(new Font("Arial", Font.BOLD, 20));
         fr.add(labelC[0]);
+        comboC.clear();
 
         for (int i = 0; i < dados_do_Curso.length; i++) {
             Py += 30;
             labelC[i + 1] = new JLabel(dados_do_Curso[i]);
-            comboC[i] = new JComboBox<>();
-            comboC[i].setModel(new DefaultComboBoxModel<>());
+            JComboBox<String> combo = new JComboBox<>();
+            combo.setModel(new DefaultComboBoxModel<>(curso.buscarCursosPorDesignacao(dados_do_Curso[i]).toArray(new String[0])));
+            
+            //comboC[i] = new JComboBox<>();
+            //comboC[i].setModel(new DefaultComboBoxModel<>());
 
             labelC[i + 1].setBounds(20, Py, 180, 20);
             labelC[i + 1].setFont(new Font("Arial", Font.PLAIN, 16));
-            comboC[i].setBounds(250, Py, 250, 25);
+       //     comboC[i].setBounds(250, Py, 250, 25);
+       		combo.setBounds(250,Py,250,25);
 
             fr.add(labelC[i + 1]);
-            fr.add(comboC[i]);
+            fr.add(combo);
+            comboC.adf(combo);
         }
     }
 
@@ -160,6 +171,7 @@ public class CadastroEst extends JFrame implements ActionListener {
                 comboP[i] = new JComboBox<>();
                 if (dadosPessoais[i].equals("Sexo")) {
                     comboP[i].setModel(new DefaultComboBoxModel<>(sexos));
+
                 } else if (dadosPessoais[i].equals("Provincia")) {
                     comboP[i].setModel(new DefaultComboBoxModel<>());
                 } else if (dadosPessoais[i].equals("EstadoCivil")) {
