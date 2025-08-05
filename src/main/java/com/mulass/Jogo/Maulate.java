@@ -92,10 +92,19 @@ public class Maulate extends JFrame implements ActionListener, KeyListener {
         // Move a cabeça
         Point cabeca = cobra.get(0);
         switch (direcao) {
-            case 'D' -> cabeca.x += TAMANHO_SEGMENTO;
-            case 'E' -> cabeca.x -= TAMANHO_SEGMENTO;
-            case 'B' -> cabeca.y += TAMANHO_SEGMENTO;
-            case 'C' -> cabeca.y -= TAMANHO_SEGMENTO;
+            case 'D':
+            					cabeca.x += TAMANHO_SEGMENTO;
+            					break;
+            case 'E':
+            					cabeca.x -= TAMANHO_SEGMENTO;
+            					break;
+            case 'B':
+            					cabeca.y += TAMANHO_SEGMENTO;
+            					break;
+            case 'C':
+            					cabeca.y -= TAMANHO_SEGMENTO;
+            					break;
+            default: break;
         }
 
         // Verifica colisão com as paredes
@@ -120,10 +129,19 @@ public class Maulate extends JFrame implements ActionListener, KeyListener {
     public void keyPressed(KeyEvent k1) {
         int tecla = k1.getKeyCode();
         switch (tecla) {
-            case KeyEvent.VK_LEFT -> { if (direcao != 'D') direcao = 'E'; }
-            case KeyEvent.VK_RIGHT -> { if (direcao != 'E') direcao = 'D'; }
-            case KeyEvent.VK_UP -> { if (direcao != 'B') direcao = 'C'; }
-            case KeyEvent.VK_DOWN -> { if (direcao != 'C') direcao = 'B'; }
+            case KeyEvent.VK_LEFT:
+            							 			 if (direcao != 'D') direcao = 'E';
+            							 			 break;
+            case KeyEvent.VK_RIGHT:
+            											if (direcao != 'E') direcao = 'D'; 
+            											break;
+            case KeyEvent.VK_UP:
+            										if (direcao != 'B') direcao = 'C';
+            										break;
+            case KeyEvent.VK_DOWN:
+            										if (direcao != 'C') direcao = 'B';
+            										break;
+           default: break;
         }
     }
 
