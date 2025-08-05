@@ -313,10 +313,10 @@ public class CadastroEst extends JFrame implements ActionListener {
                 String BI = textP[3].getText().trim();
                 String estCivil = comboP.get(4).getSelectedItem().toString();
                 String dataNasc = ((JTextField) dateChooser.getDateEditor().getUiComponent()).getText();
-                String pais = textP[6].getText().trim();
-                String provincia = comboP.get(7).getSelectedItem().toString();
-                String distrito = textP[8].getText().trim();
-                String bairro = textP[9].getText().trim();
+                String pais = textP[5].getText().trim();
+                String provincia = comboP.get(6).getSelectedItem().toString();
+                String distrito = textP[7].getText().trim();
+                String bairro = textP[8].getText().trim();
 
                 String extensao = comboC.get(0).getSelectedItem().toString();
                 String curso = comboC.get(1).getSelectedItem().toString();
@@ -418,10 +418,10 @@ public class CadastroEst extends JFrame implements ActionListener {
             textP[3].setText(candidatoAtual.getBI());
             comboP.get(4).setSelectedItem(candidatoAtual.getEstCivil());
             dateChooser.setDate(candidatoAtual.getData_nasc());
-            textP[6].setText(candidatoAtual.getPais());
-            comboP.get(7).setSelectedItem(candidatoAtual.getProv_Nasc());
+            textP[5].setText(candidatoAtual.getPais());
+            comboP.get(6).setSelectedItem(candidatoAtual.getProv_Nasc());
+            textP[7].setText("");
             textP[8].setText("");
-            textP[9].setText("");
             comboC.get(0).setSelectedItem(candidatoAtual.getDelegacao());
             comboC.get(1).setSelectedItem(candidatoAtual.getOpcao1());
             comboC.get(2).setSelectedItem(candidatoAtual.getRegime());
@@ -583,10 +583,10 @@ public class CadastroEst extends JFrame implements ActionListener {
         textP[3].setText("");
         comboP.get(4).setSelectedItem("");
         ((JTextField) dateChooser.getDateEditor().getUiComponent()).setText("");
-        textP[6].setText("");
-        comboP.get(7).setSelectedItem("");
+        textP[5].setText("");
+        comboP.get(6).setSelectedItem("");
+        textP[7].setText("");
         textP[8].setText("");
-        textP[9].setText("");
         comboC.get(0).setSelectedItem("");
         comboC.get(1).setSelectedItem("");
         comboC.get(2).setSelectedItem("");
