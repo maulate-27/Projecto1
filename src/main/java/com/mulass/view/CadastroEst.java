@@ -309,14 +309,14 @@ public class CadastroEst extends JFrame implements ActionListener {
 
                 String nome = textP[0].getText().trim();
                 String apelido = textP[1].getText().trim();
-                String sexo = comboP.get(2).getSelectedItem().toString();
-                String BI = textP[3].getText().trim();
-                String estCivil = comboP.get(4).getSelectedItem().toString();
+                String sexo = comboP.get(0).getSelectedItem().toString();
+                String BI = textP[2].getText().trim();
+                String estCivil = comboP.get(1).getSelectedItem().toString();
                 String dataNasc = ((JTextField) dateChooser.getDateEditor().getUiComponent()).getText();
-                String pais = textP[5].getText().trim();
-                String provincia = comboP.get(6).getSelectedItem().toString();
-                String distrito = textP[7].getText().trim();
-                String bairro = textP[8].getText().trim();
+                String pais = textP[3].getText().trim();
+                String provincia = comboP.get(2).getSelectedItem().toString();
+                String distrito = textP[4].getText().trim();
+                String bairro = textP[5].getText().trim();
 
                 String extensao = comboC.get(0).getSelectedItem().toString();
                 String curso = comboC.get(1).getSelectedItem().toString();
@@ -414,14 +414,14 @@ public class CadastroEst extends JFrame implements ActionListener {
 
             textP[0].setText(candidatoAtual.getNome());
             textP[1].setText(candidatoAtual.getApelido());
-            comboP.get(2).setSelectedItem(candidatoAtual.getGenero());
-            textP[3].setText(candidatoAtual.getBI());
-            comboP.get(4).setSelectedItem(candidatoAtual.getEstCivil());
+            comboP.get(0).setSelectedItem(candidatoAtual.getGenero());
+            textP[2].setText(candidatoAtual.getBI());
+            comboP.get(1).setSelectedItem(candidatoAtual.getEstCivil());
             dateChooser.setDate(candidatoAtual.getData_nasc());
-            textP[5].setText(candidatoAtual.getPais());
-            comboP.get(6).setSelectedItem(candidatoAtual.getProv_Nasc());
-            textP[7].setText("");
-            textP[8].setText("");
+            textP[3].setText(candidatoAtual.getPais());
+            comboP.get(2).setSelectedItem(candidatoAtual.getProv_Nasc());
+            textP[4].setText("");
+            textP[5].setText("");
             comboC.get(0).setSelectedItem(candidatoAtual.getDelegacao());
             comboC.get(1).setSelectedItem(candidatoAtual.getOpcao1());
             comboC.get(2).setSelectedItem(candidatoAtual.getRegime());
@@ -579,14 +579,14 @@ public class CadastroEst extends JFrame implements ActionListener {
         }
         textP[0].setText("");
         textP[1].setText("");
-        comboP.get(2).setSelectedItem("");
-        textP[3].setText("");
-        comboP.get(4).setSelectedItem("");
+        comboP.get(0).setSelectedItem("");
+        textP[2].setText("");
+        comboP.get(1).setSelectedItem("");
         ((JTextField) dateChooser.getDateEditor().getUiComponent()).setText("");
+        textP[3].setText("");
+        comboP.get(2).setSelectedItem("");
+        textP[4].setText("");
         textP[5].setText("");
-        comboP.get(6).setSelectedItem("");
-        textP[7].setText("");
-        textP[8].setText("");
         comboC.get(0).setSelectedItem("");
         comboC.get(1).setSelectedItem("");
         comboC.get(2).setSelectedItem("");
