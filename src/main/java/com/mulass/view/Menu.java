@@ -195,9 +195,8 @@ public class Menu extends JFrame implements ActionListener {
     		relatorioEstatisticas.gerar(caminho);
     		RelatorioEstatisticasPDF.abrirPDF(caminho);
 			} else if (e.getSource() == itens[1]) {
-			
 				cad = new CadastroEst(this, this instanceof Menu && getTitle().equals("Tela Menu Administrador"));
-				System.out.println("Something ocurred bad");
+				System.out.println("Something ocurred baaaaaaad");
 				try {
 					Connection cone = conm.getConnection();
 					JOptionPane.showMessageDialog(this, "Conectado a base de Dados!!", "Informacao", JOptionPane.INFORMATION_MESSAGE);
@@ -217,8 +216,8 @@ public class Menu extends JFrame implements ActionListener {
 				if (this instanceof Menu && getTitle().equals("Tela Menu Administrador")) {
 					JOptionPane.showMessageDialog(this, "Administradores não têm permissão para buscar candidatos!", "Erro", JOptionPane.ERROR_MESSAGE);
 				} else {
+					System.out.println("Something  bad");
 					cad = new CadastroEst(this, false);
-					System.out.println("Something ocurred bad");
 					close(this);
 				}
 			} else if (e.getSource() == itens[4]) {

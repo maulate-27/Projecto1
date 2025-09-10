@@ -17,7 +17,6 @@ import java.text.*;
 
 public class CadastroEst extends JFrame implements ActionListener {
 
-	
     private JLabel[] labelP = new JLabel[100];
     private JLabel[] labelC = new JLabel[100];
     private JLabel[] labelI = new JLabel[100];
@@ -35,18 +34,10 @@ public class CadastroEst extends JFrame implements ActionListener {
     private JTextField[] textP = new JTextField[100];
     private JTextField[] textI = new JTextField[100];
     private JTextField textBuscar;
-    
-/*
-	@SuppressWarnings("unchecked")
-    private JComboBox<String>[] comboP =(JComboBox<String>[]) new JComboBox<?>[100];
-    @SuppressWarnings("unchecked")
-    private JComboBox<String>[] comboC =(JComboBox<String>[]) new JComboBox<?>[100];
-    @SuppressWarnings("unchecked")
-    private JComboBox<String>[] comboI =(JComboBox<String>[]) new JComboBox<?>[100];
-*/
-		private List<JComboBox<String>> comboP = new ArrayList<>();
-		private List<JComboBox<String>> comboI = new ArrayList<>();
-		private List<JComboBox<String>> comboC = new ArrayList<>();
+
+    private JComboBox<String>[] comboP = new JComboBox[100];
+    private JComboBox<String>[] comboC = new JComboBox[100];
+    private JComboBox<String>[] comboI = new JComboBox[100];
     private JDateChooser dateChooser;
 
     private JButton[] bt = new JButton[100];
@@ -130,25 +121,19 @@ public class CadastroEst extends JFrame implements ActionListener {
         labelC[0].setBounds(20, Py, 300, 20);
         labelC[0].setFont(new Font("Arial", Font.BOLD, 20));
         fr.add(labelC[0]);
-        comboC.clear();
 
         for (int i = 0; i < dados_do_Curso.length; i++) {
             Py += 30;
             labelC[i + 1] = new JLabel(dados_do_Curso[i]);
-            JComboBox<String> combo = new JComboBox<>();
-            combo.setModel(new DefaultComboBoxModel<>());
-            
-            //comboC[i] = new JComboBox<>();
-            //comboC[i].setModel(new DefaultComboBoxModel<>());
+            comboC[i] = new JComboBox<>();
+            comboC[i].setModel(new DefaultComboBoxModel<>());
 
             labelC[i + 1].setBounds(20, Py, 180, 20);
             labelC[i + 1].setFont(new Font("Arial", Font.PLAIN, 16));
-       			//comboC[i].setBounds(250, Py, 250, 25);
-       			combo.setBounds(250,Py,250,25);
+            comboC[i].setBounds(250, Py, 250, 25);
 
             fr.add(labelC[i + 1]);
-            fr.add(combo);
-            comboC.add(combo);
+            fr.add(comboC[i]);
         }
     }
 
@@ -158,8 +143,6 @@ public class CadastroEst extends JFrame implements ActionListener {
         labelP[0].setBounds(20, Py, 300, 20);
         labelP[0].setFont(new Font("Arial", Font.BOLD, 20));
         fr.add(labelP[0]);
-        
-        comboP.clear();
 
         String[] sexos = {"M", "F"};
         String[] estCivil = {"S", "C", "D", "V"};
@@ -170,23 +153,16 @@ public class CadastroEst extends JFrame implements ActionListener {
             labelP[i + 1].setBounds(20, Py, 180, 20);
 
             if (dadosPessoais[i].equals("Sexo") || dadosPessoais[i].equals("Provincia") || dadosPessoais[i].equals("EstadoCivil")) {
-                //comboP[i] = new JComboBox<>();
-                JComboBox<String> combo = new JComboBox<>();
+                comboP[i] = new JComboBox<>();
                 if (dadosPessoais[i].equals("Sexo")) {
-                    //comboP[i].setModel(new DefaultComboBoxModel<>(sexos));
-                    combo.setModel(new DefaultComboBoxModel<>(sexos));
-
+                    comboP[i].setModel(new DefaultComboBoxModel<>(sexos));
                 } else if (dadosPessoais[i].equals("Provincia")) {
-                    //comboP[i].setModel(new DefaultComboBoxModel<>());
-                    combo.setModel(new DefaultComboBoxModel<>());
+                    comboP[i].setModel(new DefaultComboBoxModel<>());
                 } else if (dadosPessoais[i].equals("EstadoCivil")) {
-                    //comboP[i].setModel(new DefaultComboBoxModel<>(estCivil));
-                    combo.setModel(new DefaultComboBoxModel<>(estCivil));
+                    comboP[i].setModel(new DefaultComboBoxModel<>(estCivil));
                 }
-                //comboP[i].setBounds(250, Py, 250, 25);
-                combo.setBounds(250,Py,250,25);
-                fr.add(combo);
-                comboP.add(combo);
+                comboP[i].setBounds(250, Py, 250, 25);
+                fr.add(comboP[i]);
             } else if (dadosPessoais[i].equals("Data de Nascimento")) {
                 dateChooser = new JDateChooser();
                 dateChooser.setBounds(250, Py, 250, 25);
@@ -207,8 +183,6 @@ public class CadastroEst extends JFrame implements ActionListener {
         labelI[0].setBounds(20, Py, 300, 20);
         labelI[0].setFont(new Font("Arial", Font.BOLD, 20));
         fr.add(labelI[0]);
-        
-        comboI.clear();
 
         String[] habilitacoes = {"Medio", "Superior", "Mestrado"};
         String[] areas = {"GrupoC", "GrupoA", "GrupoB"};
@@ -220,28 +194,20 @@ public class CadastroEst extends JFrame implements ActionListener {
             labelI[i + 1].setBounds(20, Py, 180, 20);
 
             if (dados_de_ingresso[i].equals("Habilitacao de Ingresso") || dados_de_ingresso[i].equals("Area de Formacao") || dados_de_ingresso[i].equals("Provincia") || dados_de_ingresso[i].equals("Escola") || dados_de_ingresso[i].equals("Distrito")) {
-                //comboI[i] = new JComboBox<>();
-                JComboBox<String> combo = new JComboBox<>();
+                comboI[i] = new JComboBox<>();
                 if (dados_de_ingresso[i].equals("Habilitacao de Ingresso")) {
-                    //comboI[i].setModel(new DefaultComboBoxModel<>(habilitacoes));
-                    combo.setModel(new DefaultComboBoxModel<>(habilitacoes));
+                    comboI[i].setModel(new DefaultComboBoxModel<>(habilitacoes));
                 } else if (dados_de_ingresso[i].equals("Provincia")) {
-                    //comboI[i].setModel(new DefaultComboBoxModel<>());
-                    combo.setModel(new DefaultComboBoxModel<>());
+                    comboI[i].setModel(new DefaultComboBoxModel<>());
                 } else if (dados_de_ingresso[i].equals("Distrito")) {
-                    //comboI[i].setModel(new DefaultComboBoxModel<>(distritos));
-                    combo.setModel(new DefaultComboBoxModel<>(distritos));
+                    comboI[i].setModel(new DefaultComboBoxModel<>(distritos));
                 } else if (dados_de_ingresso[i].equals("Escola")) {
-                    //comboI[i].setModel(new DefaultComboBoxModel<>());
-                    combo.setModel(new DefaultComboBoxModel<>());
+                    comboI[i].setModel(new DefaultComboBoxModel<>());
                 } else {
-                    //comboI[i].setModel(new DefaultComboBoxModel<>(areas));
-                    combo.setModel(new DefaultComboBoxModel<>(areas));
+                    comboI[i].setModel(new DefaultComboBoxModel<>(areas));
                 }
-                //comboI[i].setBounds(250, Py, 250, 25);
-                combo.setBounds(250,Py,250,25);
-                fr.add(combo);
-                comboI.add(combo);
+                comboI[i].setBounds(250, Py, 250, 25);
+                fr.add(comboI[i]);
             } else {
                 textI[i] = new JTextField(20);
                 textI[i].setBounds(250, Py, 250, 25);
@@ -309,17 +275,17 @@ public class CadastroEst extends JFrame implements ActionListener {
 
                 String nome = textP[0].getText().trim();
                 String apelido = textP[1].getText().trim();
-                String sexo = comboP.get(0).getSelectedItem().toString();
-                String BI = textP[2].getText().trim();
-                String estCivil = comboP.get(1).getSelectedItem().toString();
+                String sexo = comboP[2].getSelectedItem().toString();
+                String BI = textP[3].getText().trim();
+                String estCivil = comboP[4].getSelectedItem().toString();
                 String dataNasc = ((JTextField) dateChooser.getDateEditor().getUiComponent()).getText();
-                String pais = textP[3].getText().trim();
-                String provincia = comboP.get(2).getSelectedItem().toString();
-                String distrito = textP[4].getText().trim();
-                String bairro = textP[5].getText().trim();
+                String pais = textP[6].getText().trim();
+                String provincia = comboP[7].getSelectedItem().toString();
+                String distrito = textP[8].getText().trim();
+                String bairro = textP[9].getText().trim();
 
-                String extensao = comboC.get(0).getSelectedItem().toString();
-                String curso = comboC.get(1).getSelectedItem().toString();
+                String extensao = comboC[0].getSelectedItem().toString();
+                String curso = comboC[1].getSelectedItem().toString();
                 
                 try{
                		Connection conm = conexao.getConnection();
@@ -337,13 +303,13 @@ public class CadastroEst extends JFrame implements ActionListener {
                 	throw new RuntimeException("Erro na busca ");
                 }
                 int curso2 = curso3.get();
-                String regime = comboC.get(2).getSelectedItem().toString();
+                String regime = comboC[2].getSelectedItem().toString();
 
-                String habilitacao = comboI.get(0).getSelectedItem().toString();
-                String provinciaEscola = comboI.get(1).getSelectedItem().toString();
-                String distritoEscola = comboI.get(2).getSelectedItem().toString();
-                String escola = comboI.get(3).getSelectedItem().toString();
-                String areaFormacao = comboI.get(4).getSelectedItem().toString();
+                String habilitacao = comboI[0].getSelectedItem().toString();
+                String provinciaEscola = comboI[1].getSelectedItem().toString();
+                String distritoEscola = comboI[2].getSelectedItem().toString();
+                String escola = comboI[3].getSelectedItem().toString();
+                String areaFormacao = comboI[4].getSelectedItem().toString();
                 String anoConclusao = textI[5].getText().trim();
 
                 GerenciarCandidato candidato;
@@ -414,22 +380,22 @@ public class CadastroEst extends JFrame implements ActionListener {
 
             textP[0].setText(candidatoAtual.getNome());
             textP[1].setText(candidatoAtual.getApelido());
-            comboP.get(0).setSelectedItem(candidatoAtual.getGenero());
-            textP[2].setText(candidatoAtual.getBI());
-            comboP.get(1).setSelectedItem(candidatoAtual.getEstCivil());
+            comboP[2].setSelectedItem(candidatoAtual.getGenero());
+            textP[3].setText(candidatoAtual.getBI());
+            comboP[4].setSelectedItem(candidatoAtual.getEstCivil());
             dateChooser.setDate(candidatoAtual.getData_nasc());
-            textP[3].setText(candidatoAtual.getPais());
-            comboP.get(2).setSelectedItem(candidatoAtual.getProv_Nasc());
-            textP[4].setText("");
-            textP[5].setText("");
-            comboC.get(0).setSelectedItem(candidatoAtual.getDelegacao());
-            comboC.get(1).setSelectedItem(candidatoAtual.getOpcao1());
-            comboC.get(2).setSelectedItem(candidatoAtual.getRegime());
-            comboI.get(0).setSelectedItem(candidatoAtual.getTipoEst());
-            comboI.get(1).setSelectedItem(candidatoAtual.getProv_Nasc());
-            comboI.get(2).setSelectedItem("");
-            comboI.get(3).setSelectedItem(candidatoAtual.getEscoPU());
-            comboI.get(4).setSelectedItem("");
+            textP[6].setText(candidatoAtual.getPais());
+            comboP[7].setSelectedItem(candidatoAtual.getProv_Nasc());
+            textP[8].setText("");
+            textP[9].setText("");
+            comboC[0].setSelectedItem(candidatoAtual.getDelegacao());
+            comboC[1].setSelectedItem(candidatoAtual.getOpcao1());
+            comboC[2].setSelectedItem(candidatoAtual.getRegime());
+            comboI[0].setSelectedItem(candidatoAtual.getTipoEst());
+            comboI[1].setSelectedItem(candidatoAtual.getProv_Nasc());
+            comboI[2].setSelectedItem("");
+            comboI[3].setSelectedItem(candidatoAtual.getEscoPU());
+            comboI[4].setSelectedItem("");
             textI[5].setText("");
 
             JOptionPane.showMessageDialog(this, "Candidato carregado para edição!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
@@ -447,7 +413,7 @@ public class CadastroEst extends JFrame implements ActionListener {
                     return false;
                 }
             } else if (dadosPessoais[i].equals("Provincia") || dadosPessoais[i].equals("Sexo") || dadosPessoais[i].equals("EstadoCivil")) {
-                if (comboP.get(i).getSelectedItem() == null) {
+                if (comboP[i].getSelectedItem() == null) {
                     return false;
                 }
             } else if (textP[i] != null && textP[i].getText().trim().isEmpty()) {
@@ -456,7 +422,7 @@ public class CadastroEst extends JFrame implements ActionListener {
         }
 
         for (int i = 0; i < dados_do_Curso.length; i++) {
-            if (comboC.get(i).getSelectedItem() == null) {
+            if (comboC[i].getSelectedItem() == null) {
                 return false;
             }
         }
@@ -465,7 +431,7 @@ public class CadastroEst extends JFrame implements ActionListener {
             if (dados_de_ingresso[i].equals("Provincia") || dados_de_ingresso[i].equals("Distrito") || 
                 dados_de_ingresso[i].equals("Area de Formacao") || dados_de_ingresso[i].equals("Habilitacao de Ingresso") || 
                 dados_de_ingresso[i].equals("Escola")) {
-                if (comboI.get(i).getSelectedItem() == null) {
+                if (comboI[i].getSelectedItem() == null) {
                     return false;
                 }
             } else if (textI[i] != null && textI[i].getText().trim().isEmpty()) {
@@ -502,8 +468,8 @@ public class CadastroEst extends JFrame implements ActionListener {
         }
 
         for (int i = 0; i < dados_de_ingresso.length; i++) {
-            if (dados_de_ingresso[i].equals("Escola") && comboI.get(i) != null) {
-                comboI.get(i).setModel(model);
+            if (dados_de_ingresso[i].equals("Escola") && comboI[i] != null) {
+                comboI[i].setModel(model);
                 break;
             }
         }
@@ -516,15 +482,15 @@ public class CadastroEst extends JFrame implements ActionListener {
         }
 
         for (int i = 0; i < dadosPessoais.length; i++) {
-            if (dadosPessoais[i].equals("Provincia") && comboP.get(i) != null) {
-                comboP.get(i).setModel(model);
+            if (dadosPessoais[i].equals("Provincia") && comboP[i] != null) {
+                comboP[i].setModel(model);
                 break;
             }
         }
 
         for (int i = 0; i < dados_de_ingresso.length; i++) {
-            if (dados_de_ingresso[i].equals("Provincia") && comboI.get(i) != null) {
-                comboI.get(i).setModel(model);
+            if (dados_de_ingresso[i].equals("Provincia") && comboI[i] != null) {
+                comboI[i].setModel(model);
                 break;
             }
         }
@@ -537,8 +503,8 @@ public class CadastroEst extends JFrame implements ActionListener {
         }
 
         for (int i = 0; i < dados_do_Curso.length; i++) {
-            if (dados_do_Curso[i].equals("Extensao") && comboC.get(i) != null) {
-                comboC.get(i).setModel(model);
+            if (dados_do_Curso[i].equals("Extensao") && comboC[i] != null) {
+                comboC[i].setModel(model);
                 break;
             }
         }
@@ -551,8 +517,8 @@ public class CadastroEst extends JFrame implements ActionListener {
         }
 
         for (int i = 0; i < dados_do_Curso.length; i++) {
-            if (dados_do_Curso[i].equals("Curso") && comboC.get(i) != null) {
-                comboC.get(i).setModel(model);
+            if (dados_do_Curso[i].equals("Curso") && comboC[i] != null) {
+                comboC[i].setModel(model);
                 break;
             }
         }
@@ -565,8 +531,8 @@ public class CadastroEst extends JFrame implements ActionListener {
         }
 
         for (int i = 0; i < dados_do_Curso.length; i++) {
-            if (dados_do_Curso[i].equals("Regime") && comboC.get(i) != null) {
-                comboC.get(i).setModel(model);
+            if (dados_do_Curso[i].equals("Regime") && comboC[i] != null) {
+                comboC[i].setModel(model);
                 break;
             }
         }
@@ -579,22 +545,22 @@ public class CadastroEst extends JFrame implements ActionListener {
         }
         textP[0].setText("");
         textP[1].setText("");
-        comboP.get(0).setSelectedItem("");
-        textP[2].setText("");
-        comboP.get(1).setSelectedItem("");
-        ((JTextField) dateChooser.getDateEditor().getUiComponent()).setText("");
+        comboP[2].setSelectedItem("");
         textP[3].setText("");
-        comboP.get(2).setSelectedItem("");
-        textP[4].setText("");
-        textP[5].setText("");
-        comboC.get(0).setSelectedItem("");
-        comboC.get(1).setSelectedItem("");
-        comboC.get(2).setSelectedItem("");
-        comboI.get(0).setSelectedItem("");
-        comboI.get(1).setSelectedItem("");
-        comboI.get(2).setSelectedItem("");
-        comboI.get(3).setSelectedItem("");
-        comboI.get(4).setSelectedItem("");
+        comboP[4].setSelectedItem("");
+        ((JTextField) dateChooser.getDateEditor().getUiComponent()).setText("");
+        textP[6].setText("");
+        comboP[7].setSelectedItem("");
+        textP[8].setText("");
+        textP[9].setText("");
+        comboC[0].setSelectedItem("");
+        comboC[1].setSelectedItem("");
+        comboC[2].setSelectedItem("");
+        comboI[0].setSelectedItem("");
+        comboI[1].setSelectedItem("");
+        comboI[2].setSelectedItem("");
+        comboI[3].setSelectedItem("");
+        comboI[4].setSelectedItem("");
         textI[5].setText("");
     }
 
