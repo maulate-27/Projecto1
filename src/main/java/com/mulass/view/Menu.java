@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.List;
 import model.*;
+import sessao.*;
 import util.*;
 import Jogo.*;
 import dao.*;
@@ -184,6 +185,8 @@ public class Menu extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		try {
 			if (e.getSource() == itens[0]) {
+				Sessao.user = null;
+				Sessao.password = null;
 				dispose();
 				lg.setVisible(true);
 			} else if (e.getSource() == itens[20]) {
@@ -198,7 +201,7 @@ public class Menu extends JFrame implements ActionListener {
 				cad = new CadastroEst(this, this instanceof Menu && getTitle().equals("Tela Menu Administrador"));
 				System.out.println("Something ocurred baaaaaaad");
 				try {
-					Connection cone = conm.getConnection();
+					Connection cone = conm.getConnection(Sessao.user,Sessao.password);
 					JOptionPane.showMessageDialog(this, "Conectado a base de Dados!!", "Informacao", JOptionPane.INFORMATION_MESSAGE);
 					close(this);
 				} catch (Exception eq) {
@@ -388,7 +391,7 @@ public class Menu extends JFrame implements ActionListener {
 		try{
 			String sql = "SELECT SalaID, Local, NrSala, Provincia, prioridade, Ordem, capacidade, NrVigilante, EmUso " +
                      "FROM salas ORDER BY Ordem, prioridade DESC";
-			Connection conn = conm.getConnection();
+			Connection conn = conm.getConnection(Sessao.user,Sessao.password);
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()){
@@ -464,7 +467,7 @@ public class Menu extends JFrame implements ActionListener {
 		tablemodel.setRowCount(0);
 		try {
 			String sql = "SELECT id, provincia, nrCandidato, nome, opcao1, opcao2, disciplina, local, sala, data FROM sala_candidato";
-				Connection conn = conm.getConnection();
+				Connection conn = conm.getConnection(Sessao.user,Sessao.password);
 				PreparedStatement stmt = conn.prepareStatement(sql);
 				ResultSet rs = stmt.executeQuery();
 				while (rs.next()) {

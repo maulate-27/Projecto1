@@ -6,6 +6,7 @@ import com.itextpdf.text.pdf.*;
 import java.io.FileOutputStream;
 import java.sql.*;
 import util.Conexao;
+import sessao.*;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +29,7 @@ public class RelatorioEstatisticasPDF {
     }
 
     private void adicionarEstatisticas(Document document) throws Exception {
-        Connection conn = conm.getConnection();
+        Connection conn = conm.getConnection(Sessao.user,Sessao.password);
 
         PdfPTable tabela = new PdfPTable(2);
         tabela.setWidthPercentage(80);

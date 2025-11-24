@@ -3,6 +3,7 @@ package dao;
 import model.*;
 import util.Conexao;
 import java.sql.*;
+import sessao.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
@@ -24,7 +25,7 @@ public class SalaDAO {
                 ")";
         
         try {
-        		Connection conn = conexao.getConnection();
+        		Connection conn = conexao.getConnection(Sessao.user,Sessao.password);
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(sql);
             conexao.fechar();
@@ -36,7 +37,7 @@ public class SalaDAO {
 
     public void salvar(SalaEstrutura sala) {
     try{
-   			Connection conn = conexao.getConnection();
+   			Connection conn = conexao.getConnection(Sessao.user,Sessao.password);
         String sql = sala.getSalaID() == 0 ?
                 "INSERT INTO salas (Local, NrSala, Provincia, prioridade, Ordem, capacidade, NrVigilante, EmUso) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)" :
@@ -78,7 +79,7 @@ public class SalaDAO {
      String sql = "SELECT SalaID, local, NrSala, Provincia, prioridade, Ordem, capacidade, NrVigilante, EmUso " +
                      "FROM salas ORDER BY Ordem, prioridade DESC";
     	try{
-    		Connection conn = conexao.getConnection();
+    		Connection conn = conexao.getConnection(Sessao.user,Sessao.password);
        
       
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -110,7 +111,7 @@ public class SalaDAO {
 		public int contarCandidatosNaSalaPorDataEHora(String nrSala, LocalDate data, String hora) {
 	    String sql = "SELECT COUNT(*) FROM sala_candidato WHERE sala = ? AND data = ? AND hora = ?";
 	    try {
-	    		Connection conn = conexao.getConnection();
+	    		Connection conn = conexao.getConnection(Sessao.user,Sessao.password);
 	        PreparedStatement stmt = conn.prepareStatement(sql);
 	        stmt.setString(1, nrSala);
         	stmt.setDate(2, Date.valueOf(data));
@@ -134,7 +135,7 @@ public class SalaDAO {
     String sql = "SELECT * FROM salas WHERE local = ?";	
 
     try{
-    	Connection conn = conexao.getConnection();
+    	Connection conn = conexao.getConnection(Sessao.user,Sessao.password);
       PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setString(1, escolaId);
         ResultSet rs = stmt.executeQuery();

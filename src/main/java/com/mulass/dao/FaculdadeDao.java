@@ -2,6 +2,7 @@ package dao;
 
 import model.*;
 import java.util.*;
+import sessao.*;
 import util.*;
 import java.sql.*;
 
@@ -9,7 +10,7 @@ public class FaculdadeDao{
 	public final Conexao conexao = new Conexao();
 
 	public void criarTabela() throws SQLException {
-	Connection conex = conexao.getConnection();
+	Connection conex = conexao.getConnection(Sessao.user,Sessao.password);
 
 		String sql = "CREATE TABLE IF NOT EXISTS faculdade("+
 									"cod serial," +
@@ -28,7 +29,7 @@ public class FaculdadeDao{
 	}
 	
 	public List<Faculdade> buscar() throws SQLException {
-		Connection conm = conexao.getConnection();
+		Connection conm = conexao.getConnection(Sessao.user,Sessao.password);
 		String sql = "select * from faculdade";
 		List<Faculdade> facul = new ArrayList<>();
 		

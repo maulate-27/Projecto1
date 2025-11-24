@@ -3,6 +3,7 @@ package dao;
 import util.*;
 import java.util.*;
 import model.*;
+import sessao.*;
 import java.sql.*;
 
 public class DelegacaoDao {
@@ -15,7 +16,7 @@ public class DelegacaoDao {
 		"CONSTRAINT pk_delegacao PRIMARY KEY(delegId)" +
 		")";
 		
-		try(Connection conv = Conexao.getConnection(); 
+		try(Connection conv = Conexao.getConnection(Sessao.user,Sessao.password); 
 					Statement stmt = conv.createStatement()) {
 							stmt.executeUpdate(sql);
 		}catch(SQLException e){
@@ -24,7 +25,7 @@ public class DelegacaoDao {
 	}
 	
 	public List<Delegacao> buscar() throws SQLException {
-		Connection conm = conexao.getConnection();
+		Connection conm = conexao.getConnection(Sessao.user,Sessao.password);
 		List<Delegacao> delega = new ArrayList<>();
 		String sql = "select * from delegacao";
 		

@@ -2,6 +2,7 @@ package dao;
 
 import model.*;
 import util.*;
+import sessao.*;
 import java.sql.*;
 import java.util.*;
 
@@ -21,7 +22,7 @@ public class DisciplinaDao {
 				"CONSTRAINT PK_disc PRIMARY KEY(id,codDisc)"+
 				")";
 				
-			try(Connection con = Conexao.getConnection();
+			try(Connection con = Conexao.getConnection(Sessao.user,Sessao.password);
 				Statement stm = con.createStatement()){
 				stm.executeUpdate(sql);
 			}catch(SQLException e){
@@ -30,7 +31,7 @@ public class DisciplinaDao {
 	}
 	
 	public List<Disciplina> buscar() throws SQLException {
-		Connection conm = conexao.getConnection(); 
+		Connection conm = conexao.getConnection(Sessao.user,Sessao.password); 
 		List<Disciplina> disciplina = new ArrayList<>();
 		String sql = "select * from disciplinas";
 		
@@ -53,7 +54,7 @@ public class DisciplinaDao {
 	}
 	
 	public List<String> buscarDisciplinasPorCurso(int cursoID) throws SQLException {
-		Connection conm = conexao.getConnection();
+		Connection conm = conexao.getConnection(Sessao.user,Sessao.password);
     List<String> disciplinas = new ArrayList<>();
     String sql = "SELECT d.coddisc FROM curso_disciplinas cd JOIN disciplinas d ON cd.disciplina_id = d.id WHERE cd.curso_id = ?";
 
@@ -73,7 +74,7 @@ public class DisciplinaDao {
     String sql = "SELECT coddisc FROM disciplinas ORDER BY coddisc";
 
     	try {
-    		Connection conn = conexao.getConnection();
+    		Connection conn = conexao.getConnection(Sessao.user,Sessao.password);
          Statement stmt = conn.createStatement();
          ResultSet rs = stmt.executeQuery(sql);
 
@@ -93,7 +94,7 @@ public class DisciplinaDao {
 		public Disciplina buscarPorCodigo(String codigo) throws SQLException {
     String sql = "SELECT * FROM disciplinas WHERE coddisc = ?";
     try {
-    	Connection conn = conexao.getConnection();
+    	Connection conn = conexao.getConnection(Sessao.user,Sessao.password);
       PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setString(1, codigo);
 

@@ -2,6 +2,7 @@ package dao;
 
 import model.*;
 import util.*;
+import sessao.*;
 import java.sql.*;
 import java.util.*;
 
@@ -12,7 +13,7 @@ public class CursoDao {
    
     
     public List<String> buscarExtensoes() throws SQLException {
-    		Connection conm = conexao.getConnection();
+    		Connection conm = conexao.getConnection(Sessao.user,Sessao.password);
         List<String> extensoes = new ArrayList<>();
         String sql = "SELECT designacao FROM Delegacao ORDER BY designacao";
         
@@ -35,7 +36,7 @@ public class CursoDao {
     }
     
     public List<String> buscarCursos() throws SQLException {
-    		Connection conm = conexao.getConnection();
+    		Connection conm = conexao.getConnection(Sessao.user,Sessao.password);
         List<String> cursos = new ArrayList<>();
         String sql = "SELECT descricao FROM Curso";
         
@@ -58,7 +59,7 @@ public class CursoDao {
     }
     
     public List<String> buscarCursos(String a) throws SQLException {
-    		Connection conm = conexao.getConnection();
+    		Connection conm = conexao.getConnection(Sessao.user,Sessao.password);
         List<String> cursos = new ArrayList<>();
         String sql = "SELECT * FROM Curso";
         
@@ -87,7 +88,7 @@ public class CursoDao {
     }
     
     public List<String> buscarRegimes() throws SQLException {
-    		Connection conm = conexao.getConnection();
+    		Connection conm = conexao.getConnection(Sessao.user,Sessao.password);
         List<String> regimes = new ArrayList<>();
         String sql = "SELECT nome FROM Regime";
         
@@ -110,7 +111,7 @@ public class CursoDao {
     }
     
     public List<String> buscarProvincia() throws SQLException {
-	    Connection conm = conexao.getConnection();
+	    Connection conm = conexao.getConnection(Sessao.user,Sessao.password);
     	List<String> provincia = new ArrayList<>();
     	String sql = "SELECT designacao FROM localidade order  by designacao asc";
     	
@@ -133,7 +134,7 @@ public class CursoDao {
     }
     
     public List<String> buscarEscola() throws SQLException {
-    	Connection conm = conexao.getConnection();
+    	Connection conm = conexao.getConnection(Sessao.user,Sessao.password);
     	List<String> escola = new ArrayList<>();
     	String sql = "SELECT designacao FROM escolapreu order by designacao asc";
     	

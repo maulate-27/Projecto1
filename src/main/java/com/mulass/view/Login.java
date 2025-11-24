@@ -6,26 +6,17 @@ import javax.swing.*;
 import javax.sound.sampled.*;
 import java.io.File;
 import java.util.Arrays;
+import sessao.*;
+import service.*;
 
 public class Login extends JFrame implements ActionListener{
-
-	String[] dados = {"maulate","antonio"};
-	
-	String[] dadosA = {"antonio","teste21"};
-	boolean comparei = false;
-	
-	String[] dada = {"Gestor","Administrador"};
-	
-	
 	JLabel lb[] = new JLabel[100];
 	TextField tx[] = new TextField[100];
 	JPasswordField tp[] = new JPasswordField[100];
 	JButton bt[] = new JButton[100];
-	//JComboBox<String> combox;
-	
-	boolean ok = false;
 	
 	public Login(String a){}
+	
 	public Login(){
 	
 		setTitle("Tela de Login");
@@ -42,7 +33,7 @@ public class Login extends JFrame implements ActionListener{
 				float transparencia = 0.3f;		
 					Graphics2D grd = (Graphics2D) g.create();
 						grd.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, transparencia));
-							ImageIcon background = new ImageIcon("/home/maulate/Transferências/Projecto1/src/main/resources /img/photo.jpg");
+							ImageIcon background = new ImageIcon("/home/maulate/Projecto1/src/main/image/images.jpeg");
 								grd.drawImage(background.getImage(),0,0, getWidth(),getHeight(), this);
 								grd.dispose();		
 			}
@@ -93,15 +84,7 @@ public class Login extends JFrame implements ActionListener{
 	
 	public void botao(JFrame ny){
 		bt[0] = new JButton("Entrar");
-		//combox = new JComboBox<>();
-		
-		//combox.setBounds(190,160,130,20);
 		bt[0].setBounds(150,160,100,20);
-		
-	//	combox.addItem(dada[0]);
-	//	combox.addItem(dada[1]);
-		
-		//ny.add(combox);
 		ny.add(bt[0]);
 		bt[0].addActionListener(this);
 		
@@ -109,7 +92,6 @@ public class Login extends JFrame implements ActionListener{
 	
 	public void Som(){
 		try{
-			//Toolkit.getDefaultToolkit().beep();
 			AudioInputStream audio = AudioSystem.getAudioInputStream(new File("/home/maulate/som/alerta1.wav"));
 			Clip clip = AudioSystem.getClip();
 			clip.open(audio);
@@ -126,13 +108,32 @@ public class Login extends JFrame implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e){
 	
-	//String tipo = (String) combox.getSelectedItem();
-	char[] password = tp[0].getPassword();
-	String user = tx[0].getText();
-	
-	char[] password1 = tp[0].getPassword();
-	String user2 = tx[0].getText();
+	  Sessao.user = null;
+	  Sessao.password = null;
+	  
+	  String password = new String(tp[0].getPassword()).trim();
+	  String user = tx[0].getText().trim();
+	  
+	  if(user.isEmpty() || password.isEmpty()){
+	    JOptionPane.showMessageDialog(this, "Por favor preencha todos campos","Informacao", JOptionPane.INFORMATION_MESSAGE);
+	    return;
+	  }
 		
+		if(Authenticar.login(user,password)){
+		  JOptionPane.showMessageDialog(this,"Bem vindo my friend","Informacao", JOptionPane.INFORMATION_MESSAGE);
+		  
+		  Sessao.user = user;
+		  Sessao.password = password;
+		  
+		  new Menu(this);
+		  ocultar(this);
+		  this.dispose();
+				
+		}else{
+		  JOptionPane.showMessageDialog(this,"Usuario ou senha incorrecta","Erro",JOptionPane.ERROR_MESSAGE);
+		}
+		
+		/*
 		try{
 			if(user.equals(dados[0])){
 			char[] pass = {'m','u','t','o','t','a'};
@@ -175,6 +176,6 @@ public class Login extends JFrame implements ActionListener{
 		Som();
 			JOptionPane.showMessageDialog(this, " 404 error!!" , "Erro", JOptionPane.ERROR_MESSAGE);
 			dispose();	
-		}
+		}*/
 	}
 }

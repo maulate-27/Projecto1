@@ -6,6 +6,7 @@ import com.itextpdf.text.pdf.*;
 import java.io.FileOutputStream;
 import java.sql.*;
 import util.*;
+import sessao.*;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +34,7 @@ public class RelatorioPDF {
         tabela.addCell("Disciplina");
         tabela.addCell("Total");
 
-        Connection conexao = conm.getConnection();
+        Connection conexao = conm.getConnection(Sessao.user,Sessao.password);
         String sql = "SELECT provincia, disciplina, COUNT(*) as total FROM sala_candidato GROUP BY provincia, disciplina ORDER BY provincia, disciplina";
         PreparedStatement stmt = conexao.prepareStatement(sql);
         ResultSet rs = stmt.executeQuery();

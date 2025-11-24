@@ -3,13 +3,14 @@ package dao;
 import java.sql.*;
 import java.util.*;
 import util.*;
+import sessao.*;
 import model.*;
 
 public class GrupoDAO {
 	private final Conexao conexao = new Conexao();
 	
 	public List<Grupo> buscar() throws SQLException {
-		Connection conm = conexao.getConnection();
+		Connection conm = conexao.getConnection(Sessao.user,Sessao.password);
 		List<Grupo> gr = new ArrayList<>();
 		String sql = "select * from grupos";
 		

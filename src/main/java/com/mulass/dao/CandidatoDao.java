@@ -4,6 +4,7 @@ import javax.swing.*;
 import model.*;
 import util.*;
 import java.sql.*;
+import sessao.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class CandidatoDao {
 								")";	
 								
 		try{
-			Connection conexao = conm.getConnection();
+			Connection conexao = conm.getConnection(Sessao.user,Sessao.password);
 			Statement stmt = conexao.createStatement();
 				stmt.executeUpdate(sql);
 				conm.fechar();
@@ -57,7 +58,7 @@ public class CandidatoDao {
             
             
     try{
-    	Connection cones = conm.getConnection();
+    	Connection cones = conm.getConnection(Sessao.user,Sessao.password);
     	PreparedStatement stmt = cones.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
       //System.out.println("1 ");
       stmt.setString(1, candidato.getNome());
@@ -101,7 +102,7 @@ public class CandidatoDao {
         List<GerenciarCandidato> candit = new ArrayList<>();
         String sql = "SELECT * FROM candidato";
         try{
-        		Connection conesd = conm.getConnection();
+        		Connection conesd = conm.getConnection(Sessao.user, Sessao.password);
             Statement stmt = conesd.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
@@ -137,7 +138,7 @@ public class CandidatoDao {
         public GerenciarCandidato buscarPorNrCandidato(int nrCandidato) throws SQLException {
         String sql = "SELECT * FROM candidato WHERE nrCandidato = ?";
         try{
-        		Connection conn = conm.getConnection();
+        		Connection conn = conm.getConnection(Sessao.user, Sessao.password);
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, nrCandidato);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -179,7 +180,7 @@ public class CandidatoDao {
     String sql = "SELECT DISTINCT prov_resi FROM candidato ORDER BY prov_resi";
 
     try {
-    	Connection conn = conm.getConnection();
+    	Connection conn = conm.getConnection(Sessao.user,Sessao.password);
          Statement stmt = conn.createStatement();
          ResultSet rs = stmt.executeQuery(sql);
 
@@ -201,7 +202,7 @@ public class CandidatoDao {
     String sql = "SELECT id, nrcandidato, nome, opcao1, opcao2, prov_resi FROM candidato WHERE prov_resi = ?";
 
     try {
-    		Connection conn = conm.getConnection();
+    		Connection conn = conm.getConnection(Sessao.user,Sessao.password);
         PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setString(1, provincia);
 

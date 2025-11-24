@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.*;
 import java.util.*;
+import sessao.*;
 import util.Conexao;
 import model.*;
 
@@ -13,7 +14,7 @@ public class LocalidadeDAO {
         String sql = "SELECT provid, designacao FROM localidade";
         try {
         
-        		Connection conn = conexao.getConnection();
+        		Connection conn = conexao.getConnection(Sessao.user,Sessao.password);
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
@@ -34,7 +35,7 @@ public class LocalidadeDAO {
     
     
     public List<Localidade> buscar() throws SQLException {
-    	Connection conm = conexao.getConnection();
+    	Connection conm = conexao.getConnection(Sessao.user,Sessao.password);
     	List<Localidade> locale = new ArrayList<>();
     	String sql = "select * from localidade";
     	
@@ -51,7 +52,7 @@ public class LocalidadeDAO {
     }
     
     public int buscarIdPorNome(String nome) throws SQLException {
-    Connection conn = conexao.getConnection();
+    Connection conn = conexao.getConnection(Sessao.user,Sessao.password);
     String sql = "SELECT provid FROM localidade WHERE LOWER(designacao) = LOWER(?)";
    	PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setString(1, nome);

@@ -3,6 +3,7 @@ package dao;
 import java.sql.*;
 import java.util.*;
 import model.*;
+import sessao.*;
 import util.Conexao;
 
 public class EscolaPreUniversitarioDAO {
@@ -13,7 +14,7 @@ public class EscolaPreUniversitarioDAO {
         String sql = "SELECT * FROM escolapreu WHERE provid = ?";
 
         try {
-        	Connection conn = conexao.getConnection();
+        	Connection conn = conexao.getConnection(Sessao.user,Sessao.password);
 	      	PreparedStatement stmt = conn.prepareStatement(sql);
           stmt.setInt(1, provinciaId);
           try (ResultSet rs = stmt.executeQuery()) {

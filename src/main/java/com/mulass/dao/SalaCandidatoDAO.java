@@ -2,6 +2,7 @@ package dao;
 
 import java.util.*;
 import model.*;
+import sessao.*;
 import util.*;
 import java.sql.*;
 
@@ -21,7 +22,7 @@ public class SalaCandidatoDAO {
                 "sala VARCHAR(50) NOT NULL" +
                 ")";
         
-        try (Connection conn = conexao.getConnection();
+        try (Connection conn = conexao.getConnection(Sessao.user,Sessao.password);
             Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(sql);
         } catch (SQLException e) {
@@ -32,7 +33,7 @@ public class SalaCandidatoDAO {
 
     public void salvar(Sala salaCandidato, SalaEstrutura salla) {
     try {
-    		Connection conn = conexao.getConnection();
+    		Connection conn = conexao.getConnection(Sessao.user,Sessao.password);
         String sql = salaCandidato.getId() == 0 ? "INSERT INTO sala_candidato (provincia, nrCandidato, nome, opcao1, opcao2, disciplina, local, sala, data) " +
                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)" :
                      "UPDATE sala_candidato set provincia = ?, nrCandidato = ?, nome = ?, opcao1 = ?, opcao2 = ?, disciplina = ?, local = ?, sala = ?, data =?" +
@@ -83,7 +84,7 @@ public class SalaCandidatoDAO {
      List<Sala> alocacoes = new ArrayList<>();
      String sql = "SELECT  * FROM sala_candidato order by nrcandidato, data, disciplina";
     	try {
-    		Connection conn = conexao.getConnection();
+    		Connection conn = conexao.getConnection(Sessao.user,Sessao.password);
        
         
              Statement stmt = conn.createStatement();
@@ -117,7 +118,7 @@ public class SalaCandidatoDAO {
     List<Sala> alocacoes = new ArrayList<>();
     String sql = "SELECT * FROM sala_candidato WHERE provincia = ? order by nrcandidato, data, disciplina";
     try {
-    		Connection conn = conexao.getConnection();
+    		Connection conn = conexao.getConnection(Sessao.user,Sessao.password);
         
              PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, provincia);
@@ -151,7 +152,7 @@ public class SalaCandidatoDAO {
 		public boolean jaAlocado(int nrCandidato, String disciplina) {
     String sql = "SELECT COUNT(*) FROM sala_candidato WHERE nrcandidato = ? AND disciplina = ?";
     try {
-    	Connection conn = conexao.getConnection();
+    	Connection conn = conexao.getConnection(Sessao.user,Sessao.password);
       PreparedStatement stmt = conn.prepareStatement(sql);
       	stmt.setInt(1, nrCandidato);
         stmt.setString(2, disciplina);
@@ -170,7 +171,7 @@ public class SalaCandidatoDAO {
     
      public void excluirTudo() {
      try {
-     		Connection conn = conexao.getConnection();
+     		Connection conn = conexao.getConnection(Sessao.user,Sessao.password);
         String sql = "DELETE FROM sala_candidato";
         
              Statement stmt = conn.createStatement();

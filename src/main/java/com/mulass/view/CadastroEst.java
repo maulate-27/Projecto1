@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import com.toedter.calendar.JDateChooser;
 import dao.*;
 import model.*;
+import sessao.*;
 import java.util.*;
 import java.util.List;
 import util.*;
@@ -288,7 +289,7 @@ public class CadastroEst extends JFrame implements ActionListener {
                 String curso = comboC[1].getSelectedItem().toString();
                 
                 try{
-               		Connection conm = conexao.getConnection();
+               		Connection conm = conexao.getConnection(Sessao.user,Sessao.password);
                		String sql = "select seq from curso where descricao = ?";
                		PreparedStatement stmt = conm.prepareStatement(sql);
                		stmt.setString(1,curso);
